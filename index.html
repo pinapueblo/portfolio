@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pablo Pena — Mechanical Engineer</title>
+<link rel="icon" type="image/png" href="images/newlogo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg: #F6F4EE;
+  --surface: #FFFFFF;
+  --surface-2: #EFEBE1;
+  --ink: #1C2333;
+  --ink-soft: #5B6373;
+  --ink-faint: #8A8F9C;
+  --accent: #C64A1E;
+  --accent-ink: #FFFFFF;
+  --line: #D8D2C2;
+  --line-strong: #1C2333;
+  --grid: rgba(28,35,51,0.05);
+  --shadow: 0 2px 24px rgba(28,35,51,0.06);
+  --radius: 2px;
+  --sheet-rot: -0.4deg;
+}
+
+html[data-theme="dark"]{
+  --bg: #12151C;
+  --surface: #1A1F29;
+  --surface-2: #202634;
+  --ink: #ECE9E0;
+  --ink-soft: #A2A8B5;
+  --ink-faint: #6D7280;
+  --accent: #FF7A3D;
+  --accent-ink: #12151C;
+  --line: #2B3140;
+  --line-strong: #ECE9E0;
+  --grid: rgba(236,233,224,0.05);
+  --shadow: 0 2px 24px rgba(0,0,0,0.35);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+    var(--bg);
+  background-size: 32px 32px, 32px 32px, 100% 100%;
+  color:var(--ink);
+  font-family:'Inter', sans-serif;
+  transition: background-color .35s ease, color .35s ease;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; display:block;}
+a{color:inherit; text-decoration:none;}
+h1,h2,h3{font-family:'Space Grotesk', sans-serif; margin:0; letter-spacing:-0.01em;}
+.mono{font-family:'IBM Plex Mono', monospace;}
+.container{max-width:1120px; margin:0 auto; padding:0 32px;}
+
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+.eyebrow::before{
+  content:"";
+  width:22px; height:1px;
+  background:var(--accent);
+  display:inline-block;
+}
+
+section{padding:96px 0;}
+.section-head{margin-bottom:56px; max-width:640px;}
+.section-head h2{font-size:clamp(28px,4vw,40px); font-weight:600;}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+header#header{
+  position:sticky; top:0; z-index:100;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--line);
+}
+nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 0;
+}
+.brand{display:flex; align-items:center; gap:10px;}
+.brand img{height:34px; width:34px; object-fit:contain; border-radius:50%;}
+.brand span{font-family:'Space Grotesk'; font-weight:600; font-size:16px;}
+nav ul{list-style:none; display:flex; gap:4px; margin:0; padding:0; align-items:center;}
+nav ul li a{
+  display:flex; align-items:center; gap:7px;
+  font-size:13px; font-weight:500; color:var(--ink-soft);
+  padding:9px 14px; border-radius:20px;
+  transition:all .2s ease;
+}
+nav ul li a i{font-size:12px;}
+nav ul li a:hover, nav ul li a.active{color:var(--ink); background:var(--surface-2);}nav ul li a.nav-special{border:1px solid rgba(198,74,30,0.22); background:rgba(198,74,30,0.08); color:var(--accent); box-shadow:inset 0 0 0 1px rgba(198,74,30,0.06);} 
+nav ul li a.nav-special:hover, nav ul li a.nav-special.active{background:rgba(198,74,30,0.14); color:var(--accent); border-color:rgba(198,74,30,0.34);} .theme-toggle{
+  position:relative;
+  width:52px; height:28px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:var(--surface-2);
+  cursor:pointer;
+  margin-left:8px;
+  flex-shrink:0;
+}
+.theme-toggle .knob{
+  position:absolute; top:2px; left:2px;
+  width:22px; height:22px; border-radius:50%;
+  background:var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--accent-ink); font-size:11px;
+  transition:transform .3s cubic-bezier(.65,0,.35,1);
+}
+html[data-theme="dark"] .theme-toggle .knob{ transform:translateX(24px); }
+@media (max-width:860px){
+  nav ul li a span{display:none;}
+  nav ul{gap:0;}
+}
+
+/* ============================================================
+   HERO — drawing-sheet / title block
+   ============================================================ */
+.hero{padding:64px 0 40px;}
+.sheet{
+  position:relative;
+  border:1px solid var(--line-strong);
+  background:var(--surface);
+  padding:40px clamp(20px,5vw,56px) 0;
+  box-shadow:var(--shadow);
+}
+.sheet::before{ /* corner ticks */
+  content:"";
+  position:absolute; inset:8px;
+  border:1px solid var(--line);
+  pointer-events:none;
+}
+.sheet-top{
+  display:flex; justify-content:space-between; align-items:flex-start;
+  font-family:'IBM Plex Mono'; font-size:11px; color:var(--ink-faint);
+  letter-spacing:.08em; text-transform:uppercase;
+  padding-bottom:20px; border-bottom:1px solid var(--line);
+  flex-wrap:wrap; gap:12px;
+}
+.sheet-top .status{display:flex; align-items:center; gap:8px; color:var(--ink-soft);}
+.status .dot{width:7px; height:7px; border-radius:50%; background:#3F9B5C; box-shadow:0 0 0 3px rgba(63,155,92,0.18);}
+
+.hero-main{
+  display:grid; grid-template-columns:1.3fr 1fr; gap:48px;
+  padding:56px 0 40px; align-items:end;
+}
+.hero-main h1{
+  font-size:clamp(40px,6.4vw,78px);
+  line-height:0.98; font-weight:700;
+}
+.hero-main h1 span{color:var(--accent);}
+.hero-tagline{
+  font-family:'IBM Plex Mono'; font-size:14px; color:var(--ink-soft);
+  margin-top:22px; line-height:1.7; max-width:480px;
+}
+.hero-side{
+  border-left:1px solid var(--line); padding-left:32px;
+  display:flex; flex-direction:column; gap:18px;
+}
+.hero-side .field{display:flex; flex-direction:column; gap:4px;}
+.hero-side .field label{
+  font-family:'IBM Plex Mono'; font-size:10px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-faint);
+}
+.hero-side .field p{margin:0; font-size:14px; font-weight:500;}
+.hero-cta{display:flex; gap:12px; padding-bottom:36px; flex-wrap:wrap;}
+.btn{
+  font-family:'IBM Plex Mono'; font-size:13px; font-weight:500;
+  padding:13px 22px; border-radius:var(--radius);
+  border:1px solid var(--line-strong);
+  display:inline-flex; align-items:center; gap:8px;
+  transition:all .2s ease;
+}
+.btn-solid{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+.btn-solid:hover{background:var(--accent); border-color:var(--accent); color:var(--accent-ink);}
+.btn-ghost:hover{background:var(--surface-2);}
+html[data-theme="dark"] .btn-solid{background:var(--ink); color:var(--bg);}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-grid{
+  display:grid; grid-template-columns:280px 1fr; gap:56px;
+}
+.about-portrait{
+  position:relative;
+  border:1px solid var(--line-strong);
+  padding:10px;
+  background:var(--surface);
+  height:fit-content;
+}
+.about-portrait img{ filter: saturate(0.85); }
+.about-portrait .tag{
+  position:absolute; bottom:-1px; left:-1px;
+  background:var(--ink); color:var(--bg);
+  font-family:'IBM Plex Mono'; font-size:10px; letter-spacing:.08em;
+  padding:5px 10px; text-transform:uppercase;
+}
+.about-copy p{
+  font-size:16px; line-height:1.75; color:var(--ink-soft); margin:0 0 18px;
+}
+.tab-titles{display:flex; gap:6px; margin:36px 0 20px; border-bottom:1px solid var(--line);}
+.tab-links{
+  font-family:'IBM Plex Mono'; font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+  padding:12px 4px; margin-right:26px; cursor:pointer; color:var(--ink-faint);
+  border-bottom:2px solid transparent; margin-bottom:-1px;
+  display:flex; align-items:center; gap:8px; transition:color .2s ease;
+}
+.tab-links.active-link{color:var(--ink); border-bottom-color:var(--accent);}
+.tab-contents{display:none;}
+.tab-contents.active-tab{display:block; animation:fade .35s ease;}
+@keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+.tab-contents ul{list-style:none; margin:0; padding:0; display:grid; gap:18px;}
+.tab-contents li{
+  padding:16px 18px; background:var(--surface); border:1px solid var(--line);
+  font-size:14px; color:var(--ink-soft); line-height:1.6;
+}
+.tab-contents li span{
+  font-family:'IBM Plex Mono'; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--accent); display:block; margin-bottom:6px; font-weight:600;
+}
+
+/* ============================================================
+   EXPERIENCE TIMELINE — signature element
+   ============================================================ */
+.timeline{position:relative; padding-left:90px;}
+.timeline::before{
+  content:"";
+  position:absolute; left:36px; top:6px; bottom:6px; width:1px;
+  background:repeating-linear-gradient(var(--line-strong),var(--line-strong) 6px, transparent 6px, transparent 12px);
+}
+.tl-item{position:relative; padding-bottom:52px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-year{
+  position:absolute; left:-90px; top:-4px; width:70px; text-align:right;
+  font-family:'Space Grotesk'; font-weight:700; font-size:22px; color:var(--ink-faint);
+}
+.tl-item.current .tl-year{color:var(--accent);}
+.tl-node{
+  position:absolute; left:32px; top:6px; width:9px; height:9px; border-radius:50%;
+  background:var(--bg); border:2px solid var(--ink-faint);
+}
+.tl-item.current .tl-node{border-color:var(--accent); background:var(--accent); box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent);}
+.tl-card{
+  background:var(--surface); border:1px solid var(--line); padding:22px 26px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.tl-role{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:baseline;}
+.tl-role h3{font-size:17px; font-weight:600;}
+.tl-role .tl-title{
+  font-family:'IBM Plex Mono'; font-size:11px; color:var(--accent);
+  text-transform:uppercase; letter-spacing:.06em;
+}
+.tl-list{margin:0; padding-left:0; list-style:none; display:grid; gap:6px;}
+.tl-list li{font-size:14px; color:var(--ink-soft); padding-left:16px; position:relative;}
+.tl-list li::before{content:"—"; position:absolute; left:0; color:var(--ink-faint);}
+
+/* ============================================================
+   PROJECTS
+   ============================================================ */
+.work-list{display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;}
+.work{
+  background:var(--surface); border:1px solid var(--line);
+  display:flex; flex-direction:column; overflow:hidden;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.work:hover{border-color:var(--accent); transform:translateY(-3px);}
+.work .thumb{aspect-ratio:4/3; overflow:hidden; border-bottom:1px solid var(--line);}
+.work .thumb img{width:100%; height:100%; object-fit:cover;}
+.work-body{padding:20px; display:flex; flex-direction:column; gap:10px; flex:1;}
+.work-body h3{font-size:16px; font-weight:600;}
+.work-body p{margin:0; font-size:13.5px; line-height:1.6; color:var(--ink-soft); flex:1;}
+.work-link{
+  font-family:'IBM Plex Mono'; font-size:12px; color:var(--accent);
+  display:flex; align-items:center; gap:6px;
+}
+.tech-stack{display:flex; flex-wrap:wrap; gap:6px;}
+.tech-stack span{
+  font-family:'IBM Plex Mono'; font-size:10px; letter-spacing:.02em;
+  padding:4px 8px; background:var(--surface-2); color:var(--ink-soft); border:1px solid var(--line);
+}
+.see-more{display:flex; justify-content:center; margin-top:40px;}
+
+/* ============================================================
+   RESUME / CONTACT
+   ============================================================ */
+.resume{
+  border:1px solid var(--line-strong); background:var(--surface);
+  padding:56px clamp(24px,6vw,72px); display:flex; align-items:center; justify-content:space-between;
+  gap:24px; flex-wrap:wrap;
+}
+.resume h2{font-size:26px;}
+.resume p{margin:8px 0 0; color:var(--ink-soft); font-size:14px;}
+
+#contact .container{
+  display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;
+}
+.contact-links{display:flex; flex-direction:column; gap:16px; margin-top:8px;}
+.contact-links a{
+  display:flex; align-items:center; gap:12px; font-size:15px; color:var(--ink-soft);
+  padding:14px 0; border-bottom:1px solid var(--line); transition:color .2s ease;
+}
+.contact-links a:hover{color:var(--accent);}
+.contact-links a i{width:20px; text-align:center; color:var(--accent);}
+.social-icons{display:flex; gap:10px; margin-top:24px;}
+.social-icons a{
+  width:42px; height:42px; border:1px solid var(--line-strong); display:flex;
+  align-items:center; justify-content:center; font-size:16px; transition:all .2s ease;
+}
+.social-icons a:hover{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+.contact-note{
+  font-family:'IBM Plex Mono'; font-size:12px; color:var(--ink-faint); line-height:1.8;
+  border-left:2px solid var(--line-strong); padding-left:20px;
+}
+
+footer{border-top:1px solid var(--line); padding:28px 0; text-align:center;}
+footer p{margin:0; font-size:12px; color:var(--ink-faint); font-family:'IBM Plex Mono';}
+
+@media (max-width:860px){
+  .hero-main, .about-grid, #contact .container{grid-template-columns:1fr;}
+  .hero-side{border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:24px; flex-direction:row; flex-wrap:wrap;}
+  .work-list{grid-template-columns:1fr;}
+  .timeline{padding-left:60px;}
+  .tl-year{left:-60px; width:44px; font-size:17px;}
+  .tl-node{left:20px;}
+  .timeline::before{left:24px;}
+}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="container">
+    <nav aria-label="Main Navigation">
+      <a href="index.html" class="brand">
+        <img src="images/newlogo.png" alt="Pablo Pena Logo">
+        <span>Pablo Pena</span>
+      </a>
+      <ul>
+        <li><a href="#about"><i class="fa fa-user"></i><span>About</span></a></li>
+        <li><a href="#experience"><i class="fa-solid fa-timeline"></i><span>Experience</span></a></li>
+        <li><a href="#portfolio"><i class="fa fa-diagram-project"></i><span>Projects</span></a></li>
+        <li><a href="#resume"><i class="fa fa-file-lines"></i><span>Resume</span></a></li>
+        <li><a href="publictalks.html"><i class="fa fa-microphone"></i><span>Talks</span></a></li>
+        <li><a href="#contact"><i class="fa fa-envelope"></i><span>Contact</span></a></li>
+        <li><a href="tutoring.html" class="nav-special"><i class="fa-solid fa-chalkboard-user"></i><span>Tutoring</span></a></li>
+      </ul>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span class="knob"><i class="fa-solid fa-sun" id="knobIcon"></i></span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero container">
+  <div class="sheet">
+    <div class="sheet-top">
+      <span>Sheet 01 / Portfolio</span>
+      <span class="status"><span class="dot"></span>Open to internships — Fall 2026</span>
+      <span>Rev. 2026.07</span>
+    </div>
+    <div class="hero-main">
+      <div>
+        <div class="eyebrow">Mechanical Engineering — UT Austin</div>
+        <h1>Pablo<br><span>Pena</span></h1>
+        <p class="hero-tagline">I design, build, and program the machines in between — CAD models that become flight hardware, code that becomes motion. Currently exploring the intersection of mechanical design, automation, and embedded systems.</p>
+        <div class="hero-cta">
+          <a href="#experience" class="btn btn-solid">View Experience <i class="fa-solid fa-arrow-down"></i></a>
+          <a href="#portfolio" class="btn btn-ghost">See Projects</a>
+        </div>
+      </div>
+      <div class="hero-side">
+        <div class="field"><label>Discipline</label><p>Mechanical Engineering, B.S.</p></div>
+        <div class="field"><label>Minor</label><p>Robotics</p></div>
+        <div class="field"><label>Based in</label><p>Austin, Texas</p></div>
+        <div class="field"><label>Focus</label><p>CAD · Automation · Embedded Systems</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Section 01 — About</div>
+      <h2>Human Spec Sheet.</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-portrait">
+        <img src="images/aboutme.png" alt="Portrait of Pablo Pena">
+        <span class="tag">Fig. 1 — Me!</span>
+      </div>
+      <div class="about-copy">
+        <p>Hi! I'm Pablo, an undergraduate Mechanical Engineering student with a minor in Robotics at The University of Texas at Austin. I'm interested in the intersection of mechanical design, automation, and embedded systems, with a focus on building systems that tightly integrate hardware and software. I enjoy transforming concepts into physical builds, whether that means designing components in CAD, prototyping through additive and subtractive manufacturing, or programming microcontrollers and robotic systems. My projects have given me hands-on experience across the full development process, from modeling and analysis to fabrication and testing.</p>
+        <p>In addition to engineering, I work as a private tutor for Algebra II, SAT preparation, and Statics. Teaching has strengthened my ability to break down complex concepts and communicate technical ideas clearly — skills I love bringing into team-based engineering environments. Outside of engineering, I enjoy working out, learning new languages, and exploring mathematics.</p>
+
+        <div class="tab-titles">
+          <p class="tab-links active-link" onclick="opentab(event,'skills')">Skills <i class="fa-solid fa-code"></i></p>
+          <p class="tab-links" onclick="opentab(event,'education')">Education <i class="fa-solid fa-graduation-cap"></i></p>
+        </div>
+
+        <div class="tab-contents active-tab" id="skills">
+          <ul>
+            <li><span>CAD & Analysis</span>Solidworks, Siemens NX, FEA, GD&amp;T, Parametric Modeling</li>
+            <li><span>Manufacturing</span>3D Printing, Laser Cutting, SMT Soldering, Wire Harness Fabrication, CF Layups</li>
+            <li><span>Programming</span>Python, Java, C++, C#, MATLAB, SQL</li>
+          </ul>
+        </div>
+        <div class="tab-contents" id="education">
+          <ul>
+            <li><span>University of Texas at Austin</span>B.S. Mechanical Engineering — Engineering Honors Program | May 2028 · Minor in Robotics</li>
+            <li><span>Cumulative GPA</span>4.0</li>
+            <li><span>Relevant Coursework</span>Mechatronics, Machine Elements, Heat Transfer, Fluid Mechanics, Thermodynamics, Materials Engineering, Dynamics, Mechanics of Solids, Numerical Methods, Differential Equations &amp; Linear Algebra, Python Programming</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE TIMELINE -->
+<section class="experience" id="experience">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Section 02 — Experience</div>
+      <h2>A timeline of my work.</h2>
+    </div>
+    <div class="timeline">
+      <div class="tl-item current">
+        <div class="tl-year mono">2026</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-role">
+            <h3>BlackPearl Technology</h3>
+            <span class="tl-title">Mechanical Engineer Intern</span>
+          </div>
+          <ul class="tl-list">
+            <li>Also serving as Engineering Extern at the Texas Department of Transportation</li>
+            <li>Continuing private tutoring in Algebra II, SAT prep, and Statics</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year mono">2025</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-role">
+            <h3>NASA L'Space MCA</h3>
+            <span class="tl-title">Payload Mechanical Engineer</span>
+          </div>
+          <ul class="tl-list">
+            <li>Designed and iterated on payload mechanical subsystems within a simulated aerospace program</li>
+            <li>Continued private tutoring alongside coursework</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year mono">2024</div>
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-role">
+            <h3>Landry's</h3>
+            <span class="tl-title">IT Intern</span>
+          </div>
+          <ul class="tl-list">
+            <li>Supported IT operations and infrastructure as an Information Technology Intern</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="portfolio" id="portfolio">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Section 03 — Projects</div>
+      <h2>Selected builds.</h2>
+    </div>
+    <div class="work-list">
+      <div class="work">
+        <div class="thumb"><img src="images/dbfplane.png" alt="DBF Plane Image"></div>
+        <div class="work-body">
+          <h3>Texas Design Build Fly RC Plane</h3>
+          <p>A fully custom RC airplane engineered, fabricated, and flight-tested for the AIAA Design/Build/Fly competition.</p>
+          <div class="tech-stack">
+            <span>SolidWorks</span><span>FEA</span><span>GD&amp;T</span><span>Composites</span><span>Resin</span>
+          </div>
+          <a href="project-dbf.html" class="work-link">View project <i class="fas fa-arrow-up-right-from-square"></i></a>
+        </div>
+      </div>
+      <div class="work">
+        <div class="thumb"><img src="images/battlebotphoto1.png" alt="Battlebot project image"></div>
+        <div class="work-body">
+          <h3>1 lb Battlebot</h3>
+          <p>A 3D printed, remote-controlled robot designed to battle other robots.</p>
+          <div class="tech-stack">
+            <span>SolidWorks</span><span>FEA</span><span>GD&amp;T</span><span>Laser Cutting</span><span>Robotics</span>
+          </div>
+          <a href="project-battlebot.html" class="work-link">View project <i class="fas fa-arrow-up-right-from-square"></i></a>
+        </div>
+      </div>
+      <div class="work">
+        <div class="thumb"><img src="images/3dofarm.png" alt="3DOF Arm Simulation Image"></div>
+        <div class="work-body">
+          <h3>3DOF Robotic Arm Simulation</h3>
+          <p>A MATLAB simulation of a 3DOF robotic arm with forward and inverse kinematics.</p>
+          <div class="tech-stack">
+            <span>MATLAB</span><span>Simulation</span><span>Kinematics</span><span>Robotics</span>
+          </div>
+          <a href="project-3DOFSim.html" class="work-link">View project <i class="fas fa-arrow-up-right-from-square"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="see-more"><a href="projects.html" class="btn btn-ghost">See all projects</a></div>
+  </div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+  <div class="container">
+    <div class="resume">
+      <div>
+        <div class="eyebrow">Section 04 — Resume</div>
+        <h2>Download Technical Data Sheet (PDF).</h2>
+        <p>Experience, education, and skills in one document.</p>
+      </div>
+      <a href="images/Pablo_Pena_CV_V1.pdf" class="btn btn-solid">View My Resume <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div>
+      <div class="eyebrow">Section 05 — Contact</div>
+      <h2>Let's talk!</h2>
+      <div class="contact-links">
+        <a href="mailto:pablopdaiki@gmail.com"><i class="fa-solid fa-envelope"></i> pablopdaiki@gmail.com</a>
+        <a href="tel:2819748224"><i class="fa-solid fa-phone"></i> 281-974-8224</a>
+      </div>
+      <div class="social-icons">
+        <a href="https://www.linkedin.com/in/pablo-pena-169123280/" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://github.com/pinapueblo" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+      </div>
+    </div>
+    <div class="contact-note">
+      Currently based in Austin, TX.<br>
+      Open to internship and co-op<br>
+      opportunities for Fall 2026.<br>
+      Response time: within 48 hrs.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2026 Pablo Pena. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // --- About tabs ---
+  function opentab(evt, tabname){
+    document.querySelectorAll('.tab-links').forEach(el => el.classList.remove('active-link'));
+    document.querySelectorAll('.tab-contents').forEach(el => el.classList.remove('active-tab'));
+    evt.currentTarget.classList.add('active-link');
+    document.getElementById(tabname).classList.add('active-tab');
+  }
+
+  // --- Scroll spy ---
+  const sections = document.querySelectorAll('section, .about, .experience, .portfolio, #resume, #contact');
+  const navLinks = document.querySelectorAll('nav ul li a');
+  window.addEventListener('scroll', () => {
+    let current = "";
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 150;
+      if (window.pageYOffset >= sectionTop) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (current && link.getAttribute('href').includes(current)) link.classList.add('active');
+    });
+  });
+
+  // --- Theme toggle (persists across pages) ---
+  const root = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const knobIcon = document.getElementById('knobIcon');
+  const themeKey = 'portfolio-theme';
+
+  function setTheme(theme){
+    root.setAttribute('data-theme', theme);
+    localStorage.setItem(themeKey, theme);
+    knobIcon.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  }
+
+  const savedTheme = localStorage.getItem(themeKey);
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+  });
+</script>
+
+</body>
+</html>
