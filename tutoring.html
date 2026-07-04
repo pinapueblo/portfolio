@@ -20,6 +20,7 @@
       --accent-ink: #FFFFFF;
       --line: #D8D2C2;
       --line-strong: #1C2333;
+      --grid: rgba(28,35,51,0.05);
       --shadow: 0 2px 24px rgba(28,35,51,0.06);
       --radius: 2px;
     }
@@ -35,6 +36,7 @@
       --accent-ink: #12151C;
       --line: #2B3140;
       --line-strong: #ECE9E0;
+      --grid: rgba(236,233,224,0.05);
       --shadow: 0 2px 24px rgba(0,0,0,0.35);
     }
 
@@ -42,7 +44,11 @@
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg,var(--grid) 1px, transparent 1px),
+        var(--bg);
+      background-size: 32px 32px, 32px 32px, 100% 100%;
       color: var(--ink);
       line-height: 1.6;
     }
