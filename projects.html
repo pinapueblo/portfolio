@@ -20,6 +20,7 @@
       --accent-ink: #FFFFFF;
       --line: #D8D2C2;
       --line-strong: #1C2333;
+      --grid: rgba(28,35,51,0.05);
       --shadow: 0 2px 24px rgba(28,35,51,0.06);
       --radius: 2px;
     }
@@ -35,6 +36,7 @@
       --accent-ink: #12151C;
       --line: #2B3140;
       --line-strong: #ECE9E0;
+      --grid: rgba(236,233,224,0.05);
       --shadow: 0 2px 24px rgba(0,0,0,0.35);
     }
 
@@ -43,8 +45,8 @@
       margin: 0;
       font-family: 'Inter', sans-serif;
       background:
-        linear-gradient(rgba(28,35,51,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(28,35,51,0.05) 1px, transparent 1px),
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg,var(--grid) 1px, transparent 1px),
         var(--bg);
       background-size: 32px 32px, 32px 32px, 100% 100%;
       color: var(--ink);
@@ -196,7 +198,6 @@
         </a>
         <div class="nav-links">
           <a href="index.html"><i class="fa fa-house"></i><span>Home</span></a>
-          <a href="tutoring.html"><i class="fa-solid fa-chalkboard-user"></i><span>Tutoring</span></a>
           <a href="projects.html" class="active"><i class="fa fa-diagram-project"></i><span>Projects</span></a>
         </div>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
