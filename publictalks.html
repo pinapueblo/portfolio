@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talks — Pablo Pena</title>
+  <link rel="icon" type="image/png" href="images/newlogo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #F6F4EE;
+      --surface: #FFFFFF;
+      --surface-2: #EFEBE1;
+      --ink: #1C2333;
+      --ink-soft: #5B6373;
+      --ink-faint: #8A8F9C;
+      --accent: #C64A1E;
+      --accent-ink: #FFFFFF;
+      --line: #D8D2C2;
+      --line-strong: #1C2333;
+      --grid: rgba(28,35,51,0.05);
+      --shadow: 0 2px 24px rgba(28,35,51,0.06);
+      --radius: 2px;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #12151C;
+      --surface: #1A1F29;
+      --surface-2: #202634;
+      --ink: #ECE9E0;
+      --ink-soft: #A2A8B5;
+      --ink-faint: #6D7280;
+      --accent: #FF7A3D;
+      --accent-ink: #12151C;
+      --line: #2B3140;
+      --line-strong: #ECE9E0;
+      --grid: rgba(236,233,224,0.05);
+      --shadow: 0 2px 24px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg,var(--grid) 1px, transparent 1px),
+        var(--bg);
+      background-size: 32px 32px, 32px 32px, 100% 100%;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; margin: 0; letter-spacing: -0.01em; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand img { height: 34px; width: 34px; object-fit: contain; border-radius: 50%; }
+    .brand span { font-family: 'Space Grotesk'; font-weight: 600; font-size: 16px; }
+    .nav-links { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      padding: 9px 14px;
+      border-radius: 20px;
+      transition: all .2s ease;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--ink);
+      background: var(--surface-2);
+    }
+    .theme-toggle {
+      position: relative;
+      width: 52px; height: 28px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .theme-toggle .knob {
+      position: absolute; top: 2px; left: 2px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-ink); font-size: 11px;
+      transition: transform .3s cubic-bezier(.65,0,.35,1);
+    }
+    html[data-theme="dark"] .theme-toggle .knob { transform: translateX(24px); }
+
+    main { padding: 56px 0 80px; }
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
+      padding: 40px clamp(20px, 5vw, 56px);
+      margin-bottom: 28px;
+    }
+    .eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 22px; height: 1px;
+      background: var(--accent);
+      display: inline-block;
+    }
+    .hero-card h1 { font-size: clamp(32px, 4.4vw, 46px); margin-bottom: 12px; }
+    .hero-card p { color: var(--ink-soft); max-width: 760px; font-size: 16px; }
+
+    .talk-list { display: grid; gap: 18px; }
+    .talk-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 12px;
+    }
+    .talk-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: baseline;
+    }
+    .talk-type {
+      font-family: 'IBM Plex Mono';
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .talk-date {
+      font-family: 'IBM Plex Mono';
+      font-size: 12px;
+      color: var(--ink-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .talk-card h3 { font-size: 20px; }
+    .talk-card p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+    .talk-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .talk-meta span {
+      font-family: 'IBM Plex Mono';
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      padding: 6px 10px;
+      background: var(--surface-2);
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+      text-transform: uppercase;
+    }
+
+    footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center; margin-top: 40px; }
+    footer p { margin: 0; font-size: 12px; color: var(--ink-faint); font-family: 'IBM Plex Mono'; }
+
+    @media (max-width: 780px) {
+      .nav-links { display: none; }
+      .talk-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav aria-label="Primary Navigation">
+        <a href="index.html" class="brand">
+          <img src="images/newlogo.png" alt="Pablo Peña Logo">
+          <span>Pablo Peña</span>
+        </a>
+        <div class="nav-links">
+          <a href="index.html"><i class="fa fa-house"></i><span>Home</span></a>
+          <a href="publictalks.html" class="active"><i class="fa fa-microphone"></i><span>Talks</span></a>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <span class="knob"><i class="fa-solid fa-sun" id="knobIcon"></i></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="hero-card">
+        <div class="eyebrow">Public speaking — lectures, panels, and presentations</div>
+        <h1>A record of the talks I’ve shared with students, communities, and technical audiences.</h1>
+        <p>This page gathers the public speaking work I’ve done across classrooms, design events, and engineering communities.</p>
+      </div>
+
+      <div class="talk-list">
+        <article class="talk-card">
+          <div class="talk-top">
+            <span class="talk-type">Presentation</span>
+            <span class="talk-date">2026 • UT Austin</span>
+          </div>
+          <h3>Large Scale Trebuchet</h3>
+          <p>Explained kinematics and dynamics concepts using a large scale trebuchet for the UT STEM girl day event.</p>
+          <div class="talk-meta">
+            <span>Engineering</span>
+            <span>Student audience</span>
+            <span>Design process</span>
+          </div>
+        </article>
+
+        <article class="talk-card">
+          <div class="talk-top">
+            <span class="talk-type">Presentation</span>
+            <span class="talk-date">2025 • UT Austin</span>
+          </div>
+          <h3>Wind Tunnel and Aerodynamic Development</h3>
+          <p>Explained the process of aerodynamic testing through a scaled down model of a functional wind tunnel to K-12 students.</p>
+          <div class="talk-meta">
+            <span>Engineering</span>
+            <span>Aircraft Design</span>
+            <span>Community</span>
+          </div>
+        </article>
+
+        <article class="talk-card">
+          <div class="talk-top">
+            <span class="talk-type">Lecture</span>
+            <span class="talk-date">2025 • Carnegie Vanguard High School</span>
+          </div>
+          <h3>Fourier Series & Heat Equation</h3>
+          <p>A math lecture covering the derivation of the Fourier Series via linear algebra and its applications to PDEs.</p>
+          <div class="talk-meta">
+            <span>Mathematics</span>
+            <span>Education</span>
+            <span>Learning</span>
+          </div>
+        </article>
+
+        <article class="talk-card">
+          <div class="talk-top">
+            <span class="talk-type">Panel</span>
+            <span class="talk-date">2025 • Carnegie Vanguard High School</span>
+          </div>
+          <h3>College Success Strategies</h3>
+          <p>Presented to the School PTO on how students can prepare for college and find their passions.</p>
+          <div class="talk-meta">
+            <span>Outreach</span>
+            <span>Education</span>
+            <span>Learning</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Pablo Pena. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const knobIcon = document.getElementById('knobIcon');
+    const themeKey = 'portfolio-theme';
+
+    function setTheme(theme){
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem(themeKey, theme);
+      knobIcon.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    }
+
+    const savedTheme = localStorage.getItem(themeKey);
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+    toggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    });
+  </script>
+</body>
+</html>
