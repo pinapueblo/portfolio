@@ -1,14 +1,15 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Texas Design Build Fly RC Plane — Pablo Pena</title>
-  <link rel="icon" type="image/png" href="images/newlogo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Texas Design Build Fly RC Plane — Pablo Pena</title>
+<link href="images/newlogo.png" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
     :root {
       --bg: #F6F4EE;
       --surface: #FFFFFF;
@@ -160,79 +161,217 @@
       margin-top: 8px;
     }
 
+    .story-sections { display: grid; gap: 18px; margin-top: 24px; }
+    .story-card {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      align-items: start;
+    }
+    .story-card h3 { font-size: 20px; margin-bottom: 10px; }
+    .story-card p { color: var(--ink-soft); margin: 0 0 12px; }
+    .story-card ul { margin: 0; padding-left: 18px; color: var(--ink-soft); }
+    .story-card li + li { margin-top: 8px; }
+    .story-media, .story-copy { min-width: 0; }
+    .media-frame {
+      border: 1px dashed var(--line-strong);
+      background: linear-gradient(135deg, var(--surface-2), var(--surface));
+      min-height: 220px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-soft);
+      text-align: center;
+      font-size: 14px;
+      padding: 16px;
+      font-family: 'IBM Plex Mono', monospace;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .media-frame.small { min-height: 150px; }
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .horizontal-scroll-gallery {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(220px, 320px);
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scroll-snap-type: x proximity;
+    }
+    .horizontal-scroll-gallery .media-frame {
+      min-height: 220px;
+      scroll-snap-align: start;
+    }
+
     footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center; margin-top: 40px; }
     footer p { margin: 0; font-size: 12px; color: var(--ink-faint); font-family: 'IBM Plex Mono'; }
 
     @media (max-width: 860px) {
       .content-grid { grid-template-columns: 1fr; }
+      .story-card { grid-template-columns: 1fr; }
       .nav-links { display: none; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <nav aria-label="Primary Navigation">
-        <a href="index.html" class="brand">
-          <img src="images/newlogo.png" alt="Pablo Pena Logo">
-          <span>Pablo Peña</span>
-        </a>
-        <div class="nav-links">
-          <a href="index.html"><i class="fa fa-house"></i><span>Home</span></a>
-          <a href="projects.html"><i class="fa fa-diagram-project"></i><span>Projects</span></a>
-        </div>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-          <span class="knob"><i class="fa-solid fa-sun" id="knobIcon"></i></span>
-        </button>
-      </nav>
-    </div>
-  </header>
+<header>
+<div class="container">
+<nav aria-label="Primary Navigation">
+<a class="brand" href="index.html">
+<img alt="Pablo Pena Logo" src="images/newlogo.png"/>
+<span>Pablo Peña</span>
+</a>
+<div class="nav-links">
+<a href="index.html"><i class="fa fa-house"></i><span>Home</span></a>
+<a href="projects.html"><i class="fa fa-diagram-project"></i><span>Projects</span></a>
+</div>
+<button aria-label="Toggle dark mode" class="theme-toggle" id="themeToggle">
+<span class="knob"><i class="fa-solid fa-sun" id="knobIcon"></i></span>
+</button>
+</nav>
+</div>
+</header>
+<main>
+<div class="container">
+<div class="hero-card">
+<div class="eyebrow">Project — RC aircraft</div>
+<h1>Texas Design Build Fly RC Plane</h1>
+<p>As the Composites Engineer for UT Austin's Design Build Fly team, I designed and manufactured lightweight composite fuselage tooling and carbon fiber structures for an AIAA competition aircraft. My work focused on transforming aerodynamic CAD models into manufacturable composite components using custom 3D-printed molds, hybrid carbon fiber/Kevlar layups, and vacuum bagging while meeting strict weight and structural requirements.</p>
+</div>
+<div class="content-grid">
+<div class="panel">
+<h2>Flight footage</h2>
+<p>Here are the available video links showing the plane in flight.</p>
+<div class="video-grid">
+<div class="video-card">
+<strong>Flight clip 1</strong>
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="200" src="https://www.youtube.com/embed/EuMBiFP8nXc" title="YouTube video player" width="100%"></iframe>
+<a href="https://youtu.be/EuMBiFP8nXc" rel="noopener noreferrer" target="_blank">Watch on YouTube <i class="fa-brands fa-youtube"></i></a>
+</div>
+<div class="video-card">
+<strong>Flight clip 2</strong>
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="200" src="https://www.youtube.com/embed/kSaTJ4CcW-I" title="YouTube video player" width="100%"></iframe>
+<a href="https://youtu.be/kSaTJ4CcW-I" rel="noopener noreferrer" target="_blank">Watch on YouTube <i class="fa-brands fa-youtube"></i></a>
+</div>
+</div>
+</div>
+<div class="panel"><h2>Engineering Highlights</h2>
+  <h3>Project Objective</h3>
+  <ul><li>Design and manufacture a lightweight composite fuselage and landing gear for AIAA Design/Build/Fly.</li>
+  <li>Meet strict weight, aerodynamic efficiency, and structural stiffness requirements.</li>
+  <li>Produce a competition-ready airframe capable of carrying heavy payloads.</li>
+</ul>
+<h3>My Role</h3>
+<ul>
+  <li>Designed composite tooling in SOLIDWORKS from concept through production.</li>
+  <li>Developed carbon fiber/Kevlar layup schedules and executed vacuum bagging.</li>
+  <li>Collaborated with the aerodynamics team to convert CAD surfaces into manufacturable structures.</li>
+</ul>
+<h3>Manufacturing</h3>
+<ul>
+  <li>Designed two negative molds split into eight printable PETG sections.</li>
+  <li>Bonded molds with epoxy reinforced using CAB-O-SIL before sanding and polishing to a mirror finish.</li>
+  <li>Produced four composite fuselage iterations to optimize stiffness-to-weight ratio.</li>
+  <li>Engineered landing gear using ±45° carbon fiber and 0° Kevlar reinforcement.</li>
+</ul>
+<h3>Results</h3>
+<ul>
+  <li>6th place worldwide among 100+ teams at the 2025 AIAA Design/Build/Fly competition.</li>
+  <li>Validated an 8G airframe carrying a 70 lb payload with no visible fuselage deformation.</li>
+  <li>Achieved zero delamination during structural testing and maintained high dimensional accuracy.</li>
+</ul>
+</div>
+</div>
+<section class="story-sections container" aria-label="Project image sections">
 
-  <main>
-    <div class="container">
-      <div class="hero-card">
-        <div class="eyebrow">Project — RC aircraft</div>
-        <h1>Texas Design Build Fly RC Plane</h1>
-        <p>A custom fixed-wing aircraft designed and built for the AIAA Design/Build/Fly competition. This project combined aerodynamic design, structural analysis, manufacturing, and flight testing into a single iterative build.</p>
+  <article class="story-card">
+    <div class="story-copy">
+      <h3>CAD and analysis</h3>
+      <p>Every project begins with a little CAD.</p>
+      <div class="media-grid">
+        <div class="media-frame small"><img src="images/planecad.png" alt="CAD image goes here" /> </div>
+        <div class="media-frame small"><img src="images/interiorplanecad.png" alt="CAD image 2 goes here" /> </div>
       </div>
-
-      <div class="content-grid">
-        <div class="panel">
-          <h2>Flight footage</h2>
-          <p>Here are the available video links showing the plane in flight.</p>
-          <div class="video-grid">
-            <div class="video-card">
-              <strong>Flight clip 1</strong>
-              <iframe width="100%" height="200" src="https://www.youtube.com/embed/EuMBiFP8nXc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-              <a href="https://youtu.be/EuMBiFP8nXc" target="_blank" rel="noopener noreferrer">Watch on YouTube <i class="fa-brands fa-youtube"></i></a>
-            </div>
-            <div class="video-card">
-              <strong>Flight clip 2</strong>
-              <iframe width="100%" height="200" src="https://www.youtube.com/embed/kSaTJ4CcW-I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-              <a href="https://youtu.be/kSaTJ4CcW-I" target="_blank" rel="noopener noreferrer">Watch on YouTube <i class="fa-brands fa-youtube"></i></a>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Project highlights</h2>
-          <ul>
-            <li>Developed a custom aircraft layout for competition constraints.</li>
-            <li>Applied CAD, analysis, and manufacturing methods to produce a flight-ready structure.</li>
-            <li>Iterated through design revisions based on performance and testing feedback.</li>
-          </ul>
-        </div>
+      <div class="media-grid">
+        <div class="media-frame small"><img src="images/landinggearfea.png" alt="FEA analysis image goes here" /> </div>
       </div>
     </div>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>&copy; 2026 Pablo Pena. All rights reserved.</p>
+    <div class="story-media">
+      <div class="media-frame"><img src="images/fuselageCAD.png" alt="Final CAD or analysis image goes here"/></div>
     </div>
-  </footer>
+  </article>
 
-  <script>
+  <article class="story-card">
+    <div class="story-copy">
+      <h3>Fuselage details</h3>
+      <p>These details show how the fuselage geometry and composite features were refined to balance stiffness, payload needs, and manufacturability.</p>
+      <div class="media-grid">
+        <div class="media-frame small"><img src="images/workdayimg3.png" alt="Fuselage Detail 1"/></div>
+        <div class="media-frame small"><img src="images/fuselagemold.png" alt="Fuselage Detail 2"/>  </div>
+      </div>
+    </div>
+    <div class="story-media">
+      <div class="media-frame"><img src="images/fiberglass.png" alt="Close-up fuselage detail image goes here"/></div>
+    </div>
+  </article>
+
+  <article class="story-card">
+    <div class="story-copy">
+      <h3>Vacuum bag process</h3>
+      <p>The vacuum bagging stage was one of the most important manufacturing steps for achieving a smooth, low-weight composite shell.</p>
+      <ul>
+        <li>Layup schedule tuned for strength-to-weight efficiency.</li>
+        <li>Bagging setup used to consolidate the laminate and remove trapped air.</li>
+        <li>Critical for preserving surface quality and dimensional accuracy.</li>
+      </ul>
+    </div>
+    <div class="story-media">
+      <div class="media-frame"><img src="images/vacuumbag.png" alt="Vacuum Bag Process image goes here"/></div>
+    </div>
+  </article>
+
+  <article class="story-card">
+    <div class="story-copy">
+      <h3>Weight testing</h3>
+      <p>Structural validation included weight-focused tests to confirm the airframe stayed within competition requirements while maintaining stiffness.</p>
+    </div>
+    <div class="story-media">
+      <div class="media-frame"><img src="images/weighttest.png" alt="Weight Testing image goes here"/></div>
+    </div>
+  </article>
+
+  <article class="story-card">
+    <div class="story-copy">
+      <h3>Team moments</h3>
+      <p>Some of our favorite moments came between build sessions.</p>
+    </div>
+    <div class="story-media">
+      <div class="horizontal-scroll-gallery" aria-label="Team photo gallery">
+        <div class="media-frame"><img src="images/teampicture1.png" alt="Team photo 1"/></div>
+        <div class="media-frame"><img src="images/teampicture2.png" alt="Team photo 2"/></div>
+        <div class="media-frame"><img src="images/teampicture3.gif" alt="Team photo 3"/></div>
+      </div>
+    </div>
+  </article>
+</section>
+</main>
+<footer>
+<div class="container">
+<p>© 2026 Pablo Pena. All rights reserved.</p>
+</div>
+</footer>
+<script>
     const root = document.documentElement;
     const toggle = document.getElementById('themeToggle');
     const knobIcon = document.getElementById('knobIcon');
