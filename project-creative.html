@@ -22,8 +22,8 @@
       --line: #D8D2C2;
       --line-strong: #1C2333;
       --grid: rgba(28,35,51,0.05);
-      --shadow: 0 2px 24px rgba(28,35,51,0.06);
-      --radius: 2px;
+      --shadow: 0 18px 40px rgba(28,35,51,0.08);
+      --radius: 24px;
     }
 
     html[data-theme="dark"] {
@@ -38,10 +38,11 @@
       --line: #2B3140;
       --line-strong: #ECE9E0;
       --grid: rgba(236,233,224,0.05);
-      --shadow: 0 2px 24px rgba(0,0,0,0.35);
+      --shadow: 0 18px 40px rgba(0,0,0,0.28);
     }
 
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -52,21 +53,31 @@
       background-size: 32px 32px, 32px 32px, 100% 100%;
       color: var(--ink);
       line-height: 1.6;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: none;
+      pointer-events: none;
+      z-index: -1;
     }
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
     h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; margin: 0; letter-spacing: -0.01em; }
     .mono { font-family: 'IBM Plex Mono', monospace; }
-    .container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
 
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: blur(10px);
+      background: rgba(246,244,238,0.82);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
     }
+    html[data-theme="dark"] header { background: rgba(18,21,28,0.82); }
     nav {
       display: flex;
       align-items: center;
@@ -112,17 +123,18 @@
     }
     html[data-theme="dark"] .theme-toggle .knob { transform: translateX(24px); }
 
-    main { padding: 56px 0 80px; }
-    .hero-card, .panel {
-      background: var(--surface);
-      border: 1px solid var(--line-strong);
-      box-shadow: var(--shadow);
+    main { padding: 36px 0 72px; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      gap: clamp(24px, 4vw, 40px);
+      align-items: center;
+      padding: 22px 0 36px;
     }
-    .hero-card { padding: 40px clamp(20px, 5vw, 56px); margin-bottom: 24px; }
     .eyebrow {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 12px;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--accent);
       display: flex;
@@ -136,37 +148,206 @@
       background: var(--accent);
       display: inline-block;
     }
-    .hero-card h1 { font-size: clamp(30px, 4.4vw, 46px); margin-bottom: 12px; }
-    .hero-card p { color: var(--ink-soft); max-width: 760px; font-size: 16px; }
-
-    .content-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px; }
-    .panel { padding: 24px; }
-    .panel h2 { font-size: 22px; margin-bottom: 10px; }
-    .panel p, .panel li { color: var(--ink-soft); }
-    .panel ul { margin: 0; padding-left: 18px; }
-    .panel li + li { margin-top: 8px; }
-    .video-grid { display: grid; gap: 16px; margin-top: 18px; }
-    .video-card {
-      border: 1px solid var(--line);
-      padding: 14px;
-      background: var(--surface-2);
+    .hero h1 {
+      font-size: clamp(38px, 5vw, 68px);
+      line-height: 0.96;
+      margin-bottom: 18px;
+      max-width: 760px;
     }
-    .video-card a {
-      font-family: 'IBM Plex Mono';
-      font-size: 12px;
-      color: var(--accent);
+    .hero p { color: var(--ink-soft); font-size: clamp(17px, 1.25vw, 20px); max-width: 620px; margin: 0; }
+    .hero-visual img,
+    .feature-media img,
+    .card img {
+      width: 100%;
+      object-fit: cover;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .feature {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: clamp(24px, 4vw, 40px);
+      align-items: center;
+      margin-top: 28px;
+      padding: 24px 0 16px;
+      border-top: 1px solid var(--line);
+    }
+    .feature-copy h2 { font-size: clamp(24px, 2.3vw, 30px); margin-bottom: 12px; }
+    .feature-copy p { color: var(--ink-soft); margin: 0 0 16px; }
+    .feature-copy a {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      margin-top: 8px;
+      gap: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .lead {
+      max-width: 760px;
+      margin: 10px 0 20px;
+    }
+    .lead h2 {
+      font-size: clamp(24px, 3vw, 32px);
+      margin-bottom: 10px;
+    }
+    .lead p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 17px;
+    }
+    .gallery-shell {
+      display: grid;
+      gap: 24px;
+      margin-top: 18px;
+    }
+    .gallery-item {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 24px;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    }
+    .gallery-item:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+      box-shadow: 0 24px 44px rgba(28,35,51,0.12);
+    }
+    .gallery-media {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      aspect-ratio: 4 / 3;
+      background: var(--surface-2);
+    }
+    .gallery-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1);
+      transition: transform .35s ease;
+    }
+    .gallery-item:hover .gallery-media img {
+      transform: scale(1.03);
+    }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+      background: transparent;
+      opacity: 0;
+      transition: opacity .28s ease;
+    }
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+    .gallery-overlay span {
+      color: #ffffff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .gallery-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 6px 4px;
+    }
+    .project-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .gallery-content h3 {
+      font-size: clamp(22px, 2.4vw, 28px);
+    }
+    .gallery-content p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+    .gallery-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .gallery-meta span {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .gallery-footer {
+      margin-top: 6px;
+      color: var(--ink-faint);
+      font-size: 13px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .note-strip {
+      margin-top: 34px;
+      padding: 18px 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--ink-soft);
+      background: rgba(255,255,255,0.45);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    html[data-theme="dark"] .note-strip { background: rgba(26,31,41,0.72); }
+    .note-strip span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .8s ease, transform .8s cubic-bezier(.22, 1, .36, 1);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: none;
     }
 
     footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center; margin-top: 40px; }
     footer p { margin: 0; font-size: 12px; color: var(--ink-faint); font-family: 'IBM Plex Mono'; }
 
-    @media (max-width: 860px) {
-      .content-grid { grid-template-columns: 1fr; }
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; }
+      .gallery-item { grid-template-columns: 1fr; }
       .nav-links { display: none; }
+    }
+    @media (max-width: 640px) {
+      .container { padding: 0 16px; }
+      .hero { padding-top: 8px; }
+      .gallery-item { padding: 14px; border-radius: 22px; }
+      .gallery-content h3 { font-size: 22px; }
+      .gallery-footer { flex-direction: column; gap: 6px; }
+      .note-strip { padding: 16px; }
     }
   </style>
 </head>
@@ -189,29 +370,97 @@
     </div>
 </header>
 <main>
-<div class="container">
-<div class="hero">
-<h1>Creative Maker Projects</h1>
-<p>Beyond engineering competitions, I enjoy designing and fabricating projects that combine CAD, 3D printing, woodworking, and product design. These projects emphasize craftsmanship, aesthetics, and iterative engineering.</p>
-</div>
-<div class="grid">
-<div class="panel">
-<h2>Featured Projects</h2>
-<div class="card"><h3>🌸 3D Printed Vase</h3><p>Designed a modern decorative vase using CAD and optimized it for additive manufacturing. Focused on organic geometry, printability, and surface finish.</p></div>
-<div class="card"><h3>♟️ Handcrafted Chessboard</h3><p>Built a wooden chessboard through precision cutting, gluing, sanding, and finishing. Carefully aligned contrasting hardwoods to achieve a clean professional appearance.</p></div>
-<div class="card"><h3>📱 3D Printed iPhone Stand</h3><p>Designed a compact phone stand featuring ergonomic viewing angles, structural reinforcement, and efficient material usage while maintaining a minimalist aesthetic.</p></div>
-</div>
-<div class="panel">
-<h2>Design Philosophy</h2>
-<ul>
-<li>Combine engineering principles with industrial design.</li>
-<li>Prototype ideas rapidly through CAD and additive manufacturing.</li>
-<li>Apply woodworking and finishing techniques to produce polished products.</li>
-<li>Balance aesthetics, durability, and functionality.</li>
-<li>Continuously iterate designs based on fabrication experience.</li>
-</ul>
-</div>
-</div></div>
+  <div class="container">
+    <section class="hero reveal">
+      <div>
+        <div class="eyebrow">Workshop log • Personal fabrication</div>
+        <h1>Making, simply because I wanted to.</h1>
+        <p>Not every project begins with a requirement. Sometimes it starts with a question, a broken object, or simply the urge to make something with my hands.</p>
+      </div>
+      <div class="hero-visual">
+        <img src="images/plantinvase.png" alt="Parametric Vase">
+      </div>
+    </section>
+
+    <div class="lead reveal">
+      <div class="eyebrow">Build Log</div>
+      <h2>A collection of things built with equal parts curiosity and engineering.</h2>
+      <p>Some were practical fixes. Others were simply excuses to learn a new manufacturing process. Each one taught me something worth carrying into the next project.</p>
+    </div>
+
+    <section class="gallery-shell">
+      
+      <article class="gallery-item reveal">
+        <div class="gallery-media">
+          <img src="images/blindconnectors.png" alt="3D Printed Window Blind Connectors">
+          <div class="gallery-overlay"><span>3D Printed Window Blind Connectors</span></div>
+        </div>
+        <div class="gallery-content">
+          <div class="project-label">Featured exhibit</div>
+          <h3>3D Printed Window Blind Connectors</h3>
+          <p>Reverse-engineered and 3D printed replacement connectors for a damaged window blind assembly.</p>
+          <div class="gallery-meta">
+            <span>ABS</span>
+            <span>3D printing</span>
+            <span>2026</span>
+          </div>
+          <div class="gallery-footer">
+            <span>Material(s): ABS</span>
+            <span>Process: 3D printing</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="gallery-item reveal">
+        <div class="gallery-media">
+          <img src="images/plantinvase.png" alt="Parametric vase">
+          <div class="gallery-overlay"><span>Parametric Vase</span></div>
+        </div>
+        <div class="gallery-content">
+          <div class="project-label">Studio study</div>
+          <h3>Plant Vase</h3>
+          <p>An iterative object study exploring rhythm, thickness, and the tension between structural logic and soft form.</p>
+          <div class="gallery-meta">
+            <span>PLA</span>
+            <span>3D printing</span>
+            <span>2025</span>
+          </div>
+          <div class="gallery-footer">
+            <span>Material(s): PLA</span>
+            <span>Process: 3D printing</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="gallery-item reveal">
+        <div class="gallery-media">
+          <img src="images/chessboard.png" alt="Laser-cut chessboard">
+          <div class="gallery-overlay"><span>Laser-Cut Chessboard</span></div>
+        </div>
+        <div class="gallery-content">
+          <div class="project-label">Featured exhibit</div>
+          <h3>Laser-Cut Chessboard</h3>
+          <p>A modern reinterpretation of a classic board game using layered wood and precision laser cutting.</p>
+          <div class="gallery-meta">
+            <span>PLA</span>
+            <span>Birch plywood</span>
+            <span>Laser cutting</span>
+            <span>3D Printing</span>
+            <span>2025</span>
+          </div>
+          <div class="gallery-footer">
+            <span>Material(s): PLA, Birch plywood</span>
+            <span>Process: Laser cutting</span>
+          </div>
+        </div>
+      </article>
+  
+    </section>
+
+    <div class="note-strip reveal">
+      <span>Designed because buying one would've been less fun.</span>
+    </div>
+  </div>
 </main>
     <footer>
         <div class="container">
@@ -238,6 +487,17 @@
       const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       setTheme(next);
     });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll('.reveal').forEach((item) => observer.observe(item));
   </script>
 </body>
 
