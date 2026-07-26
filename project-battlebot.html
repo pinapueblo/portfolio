@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mini Battle Bot — Pablo Pena</title>
+<link href="images/newlogo.png" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+    :root {
+      --bg: #F6F4EE;
+      --surface: #FFFFFF;
+      --surface-2: #EFEBE1;
+      --ink: #1C2333;
+      --ink-soft: #5B6373;
+      --ink-faint: #8A8F9C;
+      --accent: #C64A1E;
+      --accent-ink: #FFFFFF;
+      --line: #D8D2C2;
+      --line-strong: #1C2333;
+      --grid: rgba(28,35,51,0.05);
+      --shadow: 0 2px 24px rgba(28,35,51,0.06);
+      --radius: 2px;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #12151C;
+      --surface: #1A1F29;
+      --surface-2: #202634;
+      --ink: #ECE9E0;
+      --ink-soft: #A2A8B5;
+      --ink-faint: #6D7280;
+      --accent: #FF7A3D;
+      --accent-ink: #12151C;
+      --line: #2B3140;
+      --line-strong: #ECE9E0;
+      --grid: rgba(236,233,224,0.05);
+      --shadow: 0 2px 24px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg,var(--grid) 1px, transparent 1px),
+        var(--bg);
+      background-size: 32px 32px, 32px 32px, 100% 100%;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; margin: 0; letter-spacing: -0.01em; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand img { height: 34px; width: 34px; object-fit: contain; border-radius: 50%; }
+    .brand span { font-family: 'Space Grotesk'; font-weight: 600; font-size: 16px; }
+    .nav-links { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      padding: 9px 14px;
+      border-radius: 20px;
+      transition: all .2s ease;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--ink);
+      background: var(--surface-2);
+    }
+    .theme-toggle {
+      position: relative;
+      width: 52px; height: 28px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .theme-toggle .knob {
+      position: absolute; top: 2px; left: 2px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-ink); font-size: 11px;
+      transition: transform .3s cubic-bezier(.65,0,.35,1);
+    }
+    html[data-theme="dark"] .theme-toggle .knob { transform: translateX(24px); }
+
+    main { padding: 56px 0 80px; }
+    .hero-card, .panel {
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
+    }
+    .hero-card { padding: 40px clamp(20px, 5vw, 56px); margin-bottom: 24px; }
+    .eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 22px; height: 1px;
+      background: var(--accent);
+      display: inline-block;
+    }
+    .hero-card h1 { font-size: clamp(30px, 4.4vw, 46px); margin-bottom: 12px; }
+    .hero-card p { color: var(--ink-soft); max-width: 760px; font-size: 16px; }
+
+    .content-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px; }
+    .panel { padding: 24px; }
+    .panel h2 { font-size: 22px; margin-bottom: 10px; }
+    .panel h3 { font-size: 16px; margin-top: 16px; margin-bottom: 8px; }
+    .panel p, .panel li { color: var(--ink-soft); }
+    .panel ul { margin: 0; padding-left: 18px; }
+    .panel li + li { margin-top: 8px; }
+    .video-grid { display: grid; gap: 16px; margin-top: 18px; }
+    .video-card {
+      border: 1px solid var(--line);
+      padding: 14px;
+      background: var(--surface-2);
+    }
+    .video-card a {
+      font-family: 'IBM Plex Mono';
+      font-size: 12px;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .story-sections { display: grid; gap: 18px; margin-top: 24px; }
+    .story-card {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      align-items: start;
+    }
+    .story-card h3 { font-size: 20px; margin-bottom: 10px; }
+    .story-card p { color: var(--ink-soft); margin: 0 0 12px; }
+    .story-card ul { margin: 0; padding-left: 18px; color: var(--ink-soft); }
+    .story-card li + li { margin-top: 8px; }
+    .story-media, .story-copy { min-width: 0; }
+    .media-frame {
+      border: 1px dashed var(--line-strong);
+      background: linear-gradient(135deg, var(--surface-2), var(--surface));
+      min-height: 220px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-soft);
+      text-align: center;
+      font-size: 14px;
+      padding: 16px;
+      font-family: 'IBM Plex Mono', monospace;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .media-frame.small { min-height: 150px; }
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .horizontal-scroll-gallery {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(220px, 320px);
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scroll-snap-type: x proximity;
+    }
+    .horizontal-scroll-gallery .media-frame {
+      min-height: 220px;
+      scroll-snap-align: start;
+    }
+
+    footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center; margin-top: 40px; }
+    footer p { margin: 0; font-size: 12px; color: var(--ink-faint); font-family: 'IBM Plex Mono'; }
+
+    @media (max-width: 860px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .story-card { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+<header>
+<div class="container">
+<nav aria-label="Primary Navigation">
+<a class="brand" href="index.html">
+<img alt="Pablo Pena Logo" src="images/newlogo.png"/>
+<span>Pablo Peña</span>
+</a>
+<div class="nav-links">
+<a href="index.html"><i class="fa fa-house"></i><span>Home</span></a>
+<a href="projects.html"><i class="fa fa-diagram-project"></i><span>Projects</span></a>
+</div>
+<button aria-label="Toggle dark mode" class="theme-toggle" id="themeToggle">
+<span class="knob"><i class="fa-solid fa-sun" id="knobIcon"></i></span>
+</button>
+</nav>
+</div>
+</header>
+<main>
+<div class="container">
+<div class="hero-card">
+<div class="eyebrow">Project — Robotics</div>
+<h1>Mini Battle Bot</h1>
+<p>A compact combat robot designed and built for small-scale robotics competitions. This project combines mechanical engineering, electronics integration, and strategy optimization to create an efficient fighting machine. From chassis design to weapon system integration, every component was engineered for maximum performance within strict weight and size constraints.</p>
+</div>
+<div class="content-grid">
+<div class="panel">
+<h2>Build & Performance Videos</h2>
+<p>Highlights from the build process and competition footage.</p>
+<div class="video-grid">
+<div class="video-card">
+<strong>Destructive Testing</strong>
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="200" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" width="100%"></iframe>
+<a href="https://youtu.be/DQF9XZSbrAQ" rel="noopener noreferrer" target="_blank">Watch on YouTube <i class="fa-brands fa-youtube"></i></a>
+</div>
+<div class="video-card">
+<strong>Competition Match</strong>
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="200" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" width="100%"></iframe>
+<a href="https://youtu.be/bQ8Mh4OnnvE" rel="noopener noreferrer" target="_blank">Watch on YouTube <i class="fa-brands fa-youtube"></i></a>
+</div>
+</div>
+</div>
+<div class="panel">
+<h2>Engineering Highlights</h2>
+  <h3>Project Objective</h3>
+  <ul>
+    <li>Design and manufacture a competitive combat robot under 1 lb.</li>
+    <li>Integrate weapon systems for maximum damage output and reliability.</li>
+    <li>Optimize drive systems for agility and controlled movement.</li>
+  </ul>
+<h3>My Role</h3>
+<ul>
+  <li>Led chassis design and material selection in SOLIDWORKS.</li>
+  <li>Designed and integrated motor mounts and weapon drive systems.</li>
+  <li>Conducted FEA analysis for structural durability under combat conditions.</li>
+  <li>Coordinated electronics and control system integration.</li>
+</ul>
+<h3>Key Features</h3>
+<ul>
+  <li>Lightweight aluminum chassis with reinforced stress points.</li>
+  <li>Dual-motor drive system for precise control and maneuverability.</li>
+  <li>High-RPM weapon system with optimized power distribution.</li>
+  <li>Custom-designed motor mounts for vibration isolation.</li>
+</ul>
+<h3>Results</h3>
+<ul>
+  <li>Achieved rapid assembly and reliable operation across multiple matches.</li>
+  <li>Demonstrated consistent weapon performance throughout competition season.</li>
+  <li>Successful integration of all subsystems with minimal weight overhead.</li>
+</ul>
+</div>
+</div>
+<section class="story-sections container" aria-label="Project image sections">
+
+  <article class="story-card">
+    <div class="story-copy">
+      <h3>Chassis Design & CAD</h3>
+      <p>The foundation of a competitive bot starts with a well-thought-out chassis. Careful CAD work ensured every component fit perfectly while maintaining structural integrity under combat stress.</p>
+      <div class="media-grid">
+        <div class="media-frame small"><img src="images/chassisbody.png" alt="Chassis CAD Design"></div>
+        <div class="media-frame small"><img src="images/FEAonchassis.png" alt="FEA Analysis"></div>
+      </div>
+    </div>
+    <div class="story-media">
+      <div class="media-frame"><img src="images/battlebottopcrosssection.png" alt="Battlebot Top Cross-Section"></div>
+    </div>
+  </article>
+
+  <article class="story-card">
+    <div class="story-copy">
+      <h3>Weapon System Engineering</h3>
+      <p>The weapon system is the heart of any combat robot. Custom motor mounts and power distribution were engineered to maximize impact while keeping the system balanced and reliable.</p>
+      <div class="media-grid">
+        <div class="media-frame small"><img src="images/spinnerCAD.png" alt="Weapon System"></div>
+        <div class="media-frame small"><img src="images/FlipperCAD.png" alt="Power Distribution"></div>
+      </div>
+    </div>
+    <div class="story-media">
+      <div class="media-frame"><img src="images/battlebotsidecrosssection.png" alt="Weapon System Detail"></div>
+    </div>
+  </article>
+
+  <article class="story-card">
+    <div class="story-copy">
+      <h3>Drive System & Motors</h3>
+      <p>Dual brushless motors provide responsive control and impressive acceleration. The drive system was tuned for both raw power and precision maneuvering in arena conditions.</p>
+      <ul>
+        <li>1 × 280 DC motor for the spinner</li>
+        <li>1 × DC servo motor for the arm</li>
+        <li>2 × DC gear motors for drive</li>
+      </ul>
+    </div>
+    <div class="story-media">
+      <div class="media-frame"><img src="images/battlebotsidecrosssection.png" alt="Drive System" /></div>
+    </div>
+  </article>
+
+  <article class="story-card">
+    <div class="story-copy">
+      <h3>Assembly & Testing</h3>
+      <p>Bringing everything together required careful coordination and extensive testing to ensure all subsystems worked in harmony.</p>
+    </div>
+    <div class="story-media">
+      <div class="media-frame"><img src="images/battlebotweightspecs.png" alt="Assembly Process" /></div>
+    </div>
+  </article>
+
+  <article class="story-card">
+    <div class="story-copy">
+      <h3>Competition Moments</h3>
+      <p>The culmination of months of design and engineering—putting the bot to the test in the arena.</p>
+    </div>
+    <div class="story-media">
+      <div class="horizontal-scroll-gallery" aria-label="Competition photo gallery">
+        <div class="media-frame"><img src="images/competition1.png" alt="Competition Photo 1"></div>
+        <div class="media-frame"><img src="images/competition2.png" alt="Competition Photo 2"></div>
+        <div class="media-frame"><img src="images/competition3.png" alt="Competition Photo 3"></div>
+      </div>
+    </div>
+  </article>
+</section>
+</main>
+<footer>
+<div class="container">
+<p>© 2026 Pablo Pena. All rights reserved.</p>
+</div>
+</footer>
+<script>
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const knobIcon = document.getElementById('knobIcon');
+    const themeKey = 'portfolio-theme';
+
+    function setTheme(theme){
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem(themeKey, theme);
+      knobIcon.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    }
+
+    const savedTheme = localStorage.getItem(themeKey);
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+    toggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    });
+  </script>
+</body>
+</html>
