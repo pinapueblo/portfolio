@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Low-Power C1D1 Wireless Monitoring Device — BlackPearl Technology</title>
+  <link rel="icon" type="image/png" href="images/newlogo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #F6F4EE;
+      --bg-strong: #ECE7DD;
+      --surface: #FFFFFF;
+      --surface-2: #F0EAE1;
+      --ink: #171E2B;
+      --ink-soft: #586173;
+      --ink-faint: #7D8593;
+      --accent: #C64A1E;
+      --accent-soft: rgba(198, 74, 30, 0.12);
+      --line: #D8D2C2;
+      --line-strong: #1C2333;
+      --grid: rgba(23,30,43,0.05);
+      --success: #3A7D5F;
+      --shadow: 0 20px 60px rgba(23,30,43,0.08);
+      --radius: 2px;
+      --maxw: 1180px;
+      --transition: 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #12171D;
+      --bg-strong: #171d27;
+      --surface: #1A1F29;
+      --surface-2: #202834;
+      --ink: #EEF1F5;
+      --ink-soft: #B3BCCB;
+      --ink-faint: #7C8698;
+      --accent: #FF7B46;
+      --accent-soft: rgba(255, 123, 70, 0.12);
+      --line: #2E3848;
+      --line-strong: #EEF1F5;
+      --grid: rgba(238,241,245,0.05);
+      --success: #82d1a0;
+      --shadow: 0 24px 64px rgba(0,0,0,0.36);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+        var(--bg);
+      background-size: 32px 32px, 32px 32px, 100% 100%;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, h4 { margin: 0; font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
+    p { margin: 0; }
+    ul { list-style: none; margin: 0; padding: 0; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .container { max-width: var(--maxw); margin: 0 auto; padding: 0 32px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+    .eyebrow::before {
+      content: "";
+      display: inline-block;
+      width: 22px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .section-head {
+      max-width: 720px;
+      margin-bottom: 42px;
+    }
+    .section-head h2 {
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 600;
+      line-height: 1.1;
+    }
+    .section-head p {
+      margin-top: 16px;
+      font-size: 16px;
+      color: var(--ink-soft);
+      line-height: 1.7;
+    }
+
+    header.study-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 80px;
+      gap: 20px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+    }
+    .brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: contain;
+    }
+    .case-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .case-nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--ink-soft);
+      transition: var(--transition);
+    }
+    .case-nav a:hover,
+    .case-nav a.active {
+      color: var(--ink);
+      border-color: var(--line);
+      background: var(--surface-2);
+    }
+    .theme-toggle {
+      position: relative;
+      width: 52px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .theme-toggle .knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: var(--bg);
+      font-size: 11px;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html[data-theme="dark"] .theme-toggle .knob { transform: translateX(24px); }
+
+    main { padding: 32px 0 80px; }
+
+    .hero {
+      padding: 28px 0 48px;
+    }
+    .sheet {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
+      padding: 28px clamp(18px, 3vw, 48px);
+      overflow: hidden;
+    }
+    .sheet::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid var(--line);
+      pointer-events: none;
+    }
+    .sheet-top {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink-soft);
+    }
+    .status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 18%, transparent);
+    }
+
+    .hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 44px;
+      align-items: end;
+    }
+    .hero-copy h1 {
+      font-size: clamp(40px, 5vw, 72px);
+      line-height: 0.96;
+      font-weight: 700;
+    }
+    .hero-copy h1 .highlight { color: var(--accent); }
+    .hero-sub { margin-top: 16px; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; color: var(--ink-soft); }
+    .hero-desc {
+      max-width: 620px;
+      margin-top: 18px;
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 6px 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .hero-visual {
+      position: relative;
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+      border-left: 1px solid var(--line);
+      padding-left: 26px;
+    }
+    .visual-box {
+      position: relative;
+      width: min(100%, 420px);
+      aspect-ratio: 1 / 1.12;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
+        linear-gradient(135deg, var(--surface-2), var(--surface));
+      border: 1px solid var(--line-strong);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .visual-box::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(255,255,255,0.2), transparent), repeating-linear-gradient(
+        0deg,
+        transparent 0,
+        transparent 18px,
+        rgba(28,35,51,0.04) 18px,
+        rgba(28,35,51,0.04) 19px
+      );
+      opacity: 0.7;
+    }
+    .visual-box::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 34%;
+      height: 34%;
+      border: 2px solid var(--ink);
+      transform: translate(-50%, -50%) rotate(16deg);
+      border-radius: 18% 18% 22% 22%;
+      box-shadow: 0 0 0 12px rgba(198,74,30,0.07);
+    }
+    .visual-box .label {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      z-index: 2;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section { padding: 72px 0; }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+    .capsule {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+    .capsule .stack {
+      display: grid;
+      gap: 14px;
+    }
+    .cap-card {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      padding: 18px 18px 16px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .cap-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .cap-card .kicker {
+      display: inline-block;
+      margin-bottom: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+    .cap-card h3 {
+      font-size: clamp(24px, 2vw, 32px);
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .cap-card p { color: var(--ink-soft); }
+    .cap-card ul {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+      padding-left: 18px;
+      list-style: disc;
+      color: var(--ink-soft);
+    }
+    .cap-card li { line-height: 1.6; }
+
+    .render-panel {
+      display: grid;
+      place-items: center;
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
+      min-height: 360px;
+      position: relative;
+      overflow: hidden;
+      padding: 16px;
+    }
+    .render-panel::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid var(--line);
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(28,35,51,0.02),
+        rgba(28,35,51,0.02) 18px,
+        transparent 18px,
+        transparent 36px
+      );
+    }
+    .render-panel .placeholder {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      border: 1px dashed var(--line-strong);
+      background: linear-gradient(135deg, var(--surface-2), var(--surface));
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-align: center;
+      padding: 20px;
+    }
+
+    .image-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .image-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .image-card img {
+      width: 100%;
+      aspect-ratio: 1150 / 800;
+      object-fit: cover;
+      background: var(--surface-2);
+    }
+    .image-card figcaption {
+      padding: 14px 16px;
+      color: var(--ink-soft);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .swap-demo {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .swap-demo img {
+      width: 100%;
+      aspect-ratio: 400 / 712;
+      object-fit: contain;
+      background: var(--surface-2);
+    }
+    .swap-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 400px) minmax(0, 1fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+    .swap-demo figcaption {
+      padding-top: 14px;
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+    .swap-copy {
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .swap-copy h3 {
+      font-size: clamp(24px, 3vw, 36px);
+      line-height: 1.1;
+    }
+    .swap-copy p {
+      color: var(--ink-soft);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+    .swap-copy ul {
+      display: grid;
+      gap: 10px;
+      padding-left: 20px;
+      list-style: disc;
+      color: var(--ink-soft);
+    }
+
+    .metrics-wrap {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 16px;
+    }
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
+      padding: 28px 22px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .metric-card .value {
+      font-size: clamp(52px, 7vw, 96px);
+      line-height: 0.9;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .metric-card .label {
+      margin-top: 14px;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--ink-soft);
+    }
+    .impact-copy {
+      margin-top: 18px;
+      padding: 20px 24px;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 18px;
+    }
+    .method-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 22px 18px;
+    }
+    .method-box strong {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .method-box p {
+      color: var(--ink-soft);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .diagram-rail {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      align-items: stretch;
+    }
+    .diagram-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 20px 18px;
+      min-height: 210px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .diagram-card h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .diagram-card p {
+      color: var(--ink-soft);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .diagram-graphic {
+      margin-top: 18px;
+      min-height: 120px;
+      border: 1px dashed var(--line-strong);
+      background: linear-gradient(135deg, var(--surface-2), var(--surface));
+      display: grid;
+      place-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .hmi-layout,
+    .base-layout,
+    .system-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .board-visual {
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .board-visual::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid var(--line);
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0,
+        transparent 22px,
+        rgba(28,35,51,0.04) 22px,
+        rgba(28,35,51,0.04) 23px
+      );
+    }
+    .board-visual .board-art {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 420px);
+      height: min(100%, 250px);
+      border: 2px solid var(--line-strong);
+      background: linear-gradient(135deg, rgba(198,74,30,0.03), rgba(255,255,255,0)), var(--surface-2);
+      overflow: hidden;
+    }
+    .board-art .trace {
+      position: absolute;
+      border: 1px solid rgba(198,74,30,0.6);
+      background: rgba(198,74,30,0.06);
+    }
+    .board-art .pin {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid rgba(255,255,255,0.9);
+      box-shadow: 0 0 0 2px rgba(198,74,30,0.18);
+    }
+    .board-art .node {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 90px;
+      padding: 7px 10px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-soft);
+    }
+    .board-info {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 18px 18px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .info-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--accent);
+    }
+    .info-card strong {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .info-card p {
+      color: var(--ink-soft);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .mini-solar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .mini-box {
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      padding: 14px 12px;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      min-height: 82px;
+      display: grid;
+      place-items: center;
+    }
+
+    .system-block {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
+      padding: 28px 20px 20px;
+    }
+    .block-diagram {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 420px;
+      overflow: hidden;
+    }
+    .base-center {
+      position: relative;
+      z-index: 2;
+      width: min(36vw, 260px);
+      max-width: 260px;
+      min-height: 120px;
+      background: var(--surface-2);
+      border: 2px solid var(--line-strong);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 22px 18px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+    }
+    .node-cluster {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+    .blob {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px 12px;
+      min-width: 120px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .blob.small { min-width: 90px; }
+    .blob.top-left { top: 20px; left: 18%; }
+    .blob.top-right { top: 20px; right: 18%; }
+    .blob.mid-left { top: 150px; left: 4%; }
+    .blob.mid-right { top: 150px; right: 4%; }
+    .blob.bottom-left { bottom: 24px; left: 18%; }
+    .blob.bottom-right { bottom: 24px; right: 18%; }
+    .blob.center-top { top: 8px; left: 50%; transform: translateX(-50%); }
+    .blob.center-bottom { bottom: 8px; left: 50%; transform: translateX(-50%); }
+    .system-connector {
+      position: absolute;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      height: 2px;
+      opacity: 0.75;
+      z-index: 0;
+    }
+    .connector-h { width: 18%; top: 45%; }
+    .connector-h.left { left: 30%; }
+    .connector-h.right { right: 30%; }
+    .connector-v { width: 2px; height: 18%; left: 50%; }
+    .connector-v.top { top: 15%; }
+    .connector-v.bottom { bottom: 15%; }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+    }
+    .stage {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 20px 18px;
+      position: relative;
+    }
+    .stage:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 24px;
+    }
+    .stage .label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .stage h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .stage p {
+      color: var(--ink-soft);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .placeholder-strip {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .placeholder-strip .mini-box {
+      min-height: 100px;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+    }
+
+    .lessons-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .lesson-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 20px 18px;
+      box-shadow: var(--shadow);
+    }
+    .lesson-card strong {
+      display: block;
+      margin-bottom: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .lesson-card p {
+      color: var(--ink-soft);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .role-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 18px 22px;
+    }
+    .role-card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+    .role-card p {
+      color: var(--ink-soft);
+      line-height: 1.7;
+    }
+    .role-block {
+      display: grid;
+      gap: 18px;
+    }
+    .role-item {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 18px 18px 16px;
+    }
+    .role-item strong {
+      display: block;
+      margin-bottom: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+    .role-item ul {
+      list-style: disc;
+      padding-left: 18px;
+      color: var(--ink-soft);
+      display: grid;
+      gap: 8px;
+      line-height: 1.6;
+    }
+
+    .portfolio-bottom-nav {
+      padding-top: 20px;
+      margin-top: 40px;
+      border-top: 1px solid var(--line);
+    }
+    .portfolio-bottom-nav .inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .portfolio-bottom-nav .inner span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .nav-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 10px 18px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: var(--transition);
+    }
+    .btn:hover {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--bg);
+    }
+    .btn.primary {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+    .btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .feature-grid,
+      .hmi-layout,
+      .base-layout,
+      .role-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-visual { border-left: none; border-top: 1px solid var(--line); padding-left: 0; padding-top: 20px; }
+      .workflow,
+      .lessons-grid,
+      .method-grid,
+      .diagram-rail,
+      .image-gallery {
+        grid-template-columns: 1fr 1fr;
+      }
+      .swap-layout { grid-template-columns: minmax(220px, 320px) minmax(0, 1fr); }
+      .system-layout { grid-template-columns: 1fr; }
+      .block-diagram { min-height: 360px; }
+      .case-nav { justify-content: flex-start; }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 0 18px; }
+      .topbar { flex-wrap: wrap; padding: 14px 0; }
+      .case-nav { width: 100%; justify-content: flex-start; }
+      .workflow,
+      .lessons-grid,
+      .method-grid,
+      .diagram-rail,
+      .metrics-wrap,
+        .image-gallery,
+      .mini-solar {
+        grid-template-columns: 1fr;
+      }
+      .swap-layout { grid-template-columns: 1fr; }
+      .sheet-top { letter-spacing: 0.08em; }
+      .tag-list { gap: 8px; }
+      .stage:not(:last-child)::after { display: none; }
+      .placeholder-strip { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="study-header">
+    <div class="container topbar">
+      <a href="index.html" class="brand" aria-label="Back to home">
+        <img src="images/newlogo.png" alt="Pablo Peña logo">
+        <span>Pablo Peña</span>
+      </a>
+      <nav class="case-nav" aria-label="Section navigation">
+        <a href="#overview" class="active">Overview</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#hmi">HMI</a>
+        <a href="#baseboard">Baseboard</a>
+        <a href="#manufacturing">Manufacturing</a>
+        <a href="#results">Results</a>
+      </nav>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span class="knob"><i class="fa-solid fa-sun" id="knobIcon"></i></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <section class="hero reveal">
+        <div class="sheet">
+          <div class="sheet-top">
+            <span>Mechanical engineering internship</span>
+            <span class="status"><span class="dot"></span>BlackPearl Technology</span>
+            <span>Case study</span>
+          </div>
+
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <div class="eyebrow">Internship project</div>
+              <h1>Low-Power <span class="highlight">C1D1</span><br>Wireless Monitoring Device</h1>
+              <div class="hero-sub">Mechanical Engineering Internship — BlackPearl Technology</div>
+              <p class="hero-desc">Designed and developed a ruggedized, ultra-low-power wireless monitoring device from CAD through prototype and into production.</p>
+              <div class="tag-list" aria-label="Project tags">
+                <span class="tag">C1D1</span>
+                <span class="tag">Wireless Sensing</span>
+                <span class="tag">Mechanical Design</span>
+                <span class="tag">Design for Manufacturing</span>
+              </div>
+            </div>
+
+            <div class="hero-visual">
+              <div class="visual-box">
+                <img src = "images/helios.png" alt="Exploded view of the wireless monitoring device" class="placeholder">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="overview" class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">Project overview</div>
+          <h2>Ultra-Low-Power Class 1 Division 1 (C1D1) Device</h2>
+        </div>
+
+        <div class="feature-grid">
+          <div class="capsule">
+            <div class="stack">
+              <article class="cap-card">
+                <span class="kicker">11 sensors</span>
+                <h3>Wireless gauge incorporating 11 sensors</h3>
+                <ul>
+                  <li>Temperature sensor</li>
+                  <li>IMU with accelerometer</li>
+                  <li>Additional configurable sensing inputs</li>
+                </ul>
+              </article>
+
+              <article class="cap-card">
+                <span class="kicker">Wireless connectivity</span>
+                <h3>Connectivity to support field deployment</h3>
+                <ul>
+                  <li>Bluetooth</li>
+                  <li>Wi-Fi</li>
+                  <li>LoRaWAN</li>
+                </ul>
+              </article>
+
+              <article class="cap-card">
+                <span class="kicker">Communication</span>
+                <h3>Industrial and digital communication support</h3>
+                <ul>
+                  <li>MQTT machine-to-machine communication</li>
+                  <li>Bluetooth Low Energy (BLE) data transfers</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+
+          <div class="render-panel">
+            <img src="images/heliosexplodedview.png" alt="CAD render of the wireless monitoring device" class="placeholder">
+          </div>
+        </div>
+      </section>
+
+      <section id="components" class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">Mechanical components</div>
+          <h2>Designed for serviceability and rapid assembly</h2>
+        </div>
+
+        <div class="image-gallery">
+          <figure class="image-card">
+            <img src="images/UpperPCBring.jpg" alt="Upper PCB ring">
+            <figcaption>Upper PCB ring</figcaption>
+          </figure>
+          <figure class="image-card">
+            <img src="images/RimMount.jpg" alt="Upper rim mount">
+            <figcaption>Upper rim mount</figcaption>
+          </figure>
+          <figure class="image-card">
+            <img src="images/LowerPCBring.jpg" alt="Lower PCB ring">
+            <figcaption>Lower PCB ring</figcaption>
+          </figure>
+          <figure class="image-card">
+            <img src="images/BatteryMount.jpg" alt="Battery mount">
+            <figcaption>Battery mount</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="battery-swap" class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">Service workflow</div>
+          <h2>Quick battery swap</h2>
+        </div>
+
+        <div class="swap-layout">
+          <figure class="swap-demo">
+            <img src="images/torsionalsnapGif.gif" alt="Animated demonstration of a quick battery swap">
+            <figcaption>Serviceable battery mounting enables fast battery replacement in the field.</figcaption>
+          </figure>
+
+          <div class="swap-copy">
+            <div class="eyebrow">Designed for service</div>
+            <h3>Fast access without unnecessary disassembly</h3>
+            <p>The torsional battery mount holds the battery securely during operation while allowing it to be released quickly when service is required.</p>
+            <ul>
+              <li>Quick battery removal and replacement</li>
+              <li>Secure retention during field use</li>
+              <li>Less downtime during maintenance</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="results" class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">Engineering impact</div>
+          <h2>Lean design execution with measurable cost reduction</h2>
+        </div>
+
+        <div class="metrics-wrap">
+          <div class="metric-card">
+            <div class="value">67%</div>
+            <div class="label">Reduction in component count</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="value">60%</div>
+            <div class="label">Reduction in assembly time</div>
+          </div>
+        </div>
+
+        <div class="impact-copy">
+          Took the design from CAD through prototype and into production, reducing component count by 67% through design consolidation and cutting assembly time by 60% through fixture and process improvements.
+        </div>
+
+        <div class="method-grid">
+          <div class="method-box">
+            <strong>Design Consolidation</strong>
+            <p>Reduced component count by 67% through simplification of the mechanical architecture and part consolidation.</p>
+          </div>
+          <div class="method-box">
+            <strong>Fixture + Process Improvements</strong>
+            <p>Reduced assembly time by 60% through better fixture design and process refinements that improved repeatability and efficiency.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="architecture" class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">Architecture</div>
+          <h2>Dual-PCB architecture</h2>
+        </div>
+
+        <div class="diagram-rail">
+          <div class="diagram-card">
+            <h3>HMI Board</h3>
+            <p>Human interface and system-level control electronics for user interaction and power management.</p>
+            <img src="images/hmi.png" alt="HMI Board" class="placeholder">
+          </div>
+
+          <div class="diagram-card">
+            <h3>Baseboard</h3>
+            <p>Core board for sensors, wireless connectivity, power, and external interfaces.</p>
+            <img src="images/baseboard.png" alt="Baseboard" class="placeholder">
+          </div>
+
+          <div class="diagram-card">
+            <h3>System interfaces</h3>
+            <p>Sensor inputs, wireless communication, and power architecture were distributed across the two boards.</p>
+            <div class="diagram-graphic">[SYSTEM BLOCK]</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="hmi" class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">HMI board</div>
+          <h2>User-facing control and power interface</h2>
+        </div>
+
+        <div class="hmi-layout">
+          <div class="board-visual">
+            <div class="board-art" aria-label="HMI board placeholder">
+              <div class="trace" style="left:15%; top:38%; width:34%; height:16%; border-radius:18px;"></div>
+              <div class="trace" style="left:42%; top:18%; width:18%; height:52%; border-radius:16px;"></div>
+              <div class="trace" style="left:62%; top:28%; width:18%; height:26%; border-radius:14px;"></div>
+              <div class="node" style="left:18%; top:22%;">Hall</div>
+              <div class="node" style="left:62%; top:18%;">LCD</div>
+              <div class="node" style="left:20%; bottom:18%;">Power</div>
+              <div class="pin" style="left:12%; top:58%;"></div>
+              <div class="pin" style="right:18%; top:58%;"></div>
+              <div class="pin" style="left:48%; top:70%;"></div>
+            </div>
+          </div>
+
+          <div class="board-info">
+            <div class="info-card">
+              <strong>HMI features</strong>
+              <p><b>Hall-effect sensors</b> connect to wake-up-capable I/O pins on an STM32.</p>
+            </div>
+
+            <div class="info-card">
+              <strong>Display</strong>
+              <p>LCD/OLED user interface.</p>
+            </div>
+
+            <div class="info-card">
+              <strong>Power</strong>
+              <p>Connector for the system's main power source (battery).</p>
+            </div>
+
+            <div class="info-card">
+              <strong>Solar</strong>
+              <p>Supports either an internal or external solar panel. External solar panel configuration allows the use of a larger LCD.</p>
+              <div class="mini-solar">
+                <div class="mini-box">Internal Solar<br>Compact configuration</div>
+                <div class="mini-box">External Solar<br>Larger LCD</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="baseboard" class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">Baseboard</div>
+          <h2>Core system board for sensing, communication, and power</h2>
+        </div>
+
+        <div class="base-layout">
+          <div class="board-visual">
+            <div class="board-art" aria-label="Baseboard placeholder">
+              <div class="trace" style="left:18%; top:18%; width:56%; height:12%; border-radius:10px;"></div>
+              <div class="trace" style="left:22%; top:32%; width:12%; height:36%; border-radius:10px;"></div>
+              <div class="trace" style="left:52%; top:32%; width:14%; height:36%; border-radius:10px;"></div>
+              <div class="trace" style="left:68%; top:28%; width:12%; height:26%; border-radius:10px;"></div>
+              <div class="node" style="left:10%; top:18%;">Solar</div>
+              <div class="node" style="left:30%; top:12%;">BLE</div>
+              <div class="node" style="left:58%; top:12%;">Wi-Fi</div>
+              <div class="node" style="left:68%; top:58%;">RS-485</div>
+              <div class="node" style="left:12%; bottom:16%;">Temp</div>
+              <div class="node" style="right:18%; bottom:14%;">IMU</div>
+              <div class="pin" style="left:18%; top:56%;"></div>
+              <div class="pin" style="right:18%; top:48%;"></div>
+            </div>
+          </div>
+
+          <div class="board-info">
+            <div class="info-card">
+              <strong>Solar power</strong>
+              <p>Option for onboard solar panel and option for external solar panel.</p>
+            </div>
+            <div class="info-card">
+              <strong>Wireless</strong>
+              <p>Bluetooth LE, Wi-Fi, LoRaWAN.</p>
+            </div>
+            <div class="info-card">
+              <strong>Onboard sensors</strong>
+              <p>Temperature sensor and IMU with accelerometer.</p>
+            </div>
+            <div class="info-card">
+              <strong>External sensors</strong>
+              <p>4 additional hardware-configurable external sensor inputs.</p>
+            </div>
+            <div class="info-card">
+              <strong>Industrial communication</strong>
+              <p>RS-485 port for RS-485-compatible devices.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">System architecture</div>
+          <h2>Electromechanical system layout</h2>
+        </div>
+        <img src="images/heliossystemlayout.png" alt="System block diagram" class="placeholder">
+      </section>
+
+      <section id="manufacturing" class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">From CAD to production</div>
+          <h2>Mechanical development through prototype and scale-up</h2>
+        </div>
+
+        <div class="workflow">
+          <div class="stage">
+            <div class="label">01</div>
+            <h3>CAD</h3>
+            <p>Initial mechanical layout and conceptual design.</p>
+          </div>
+          <div class="stage">
+            <div class="label">02</div>
+            <h3>Design Consolidation</h3>
+            <p>Simplified the architecture to reduce part count and improve manufacturability.</p>
+          </div>
+          <div class="stage">
+            <div class="label">03</div>
+            <h3>Prototype</h3>
+            <p>Validated form, fit, and assembly while refining the design.</p>
+          </div>
+          <div class="stage">
+            <div class="label">04</div>
+            <h3>Fixture / Process Improvements</h3>
+            <p>Improved assembly efficiency and repeatability with fixture and process refinements.</p>
+          </div>
+          <div class="stage">
+            <div class="label">05</div>
+            <h3>Production</h3>
+            <p>Supported the transition from prototype into production-ready hardware.</p>
+          </div>
+        </div>
+
+        <div class="placeholder-strip">
+          <div class="mini-box">[CAD SCREENSHOT]</div>
+          <div class="mini-box">[PROTOTYPE PHOTO]</div>
+          <div class="mini-box">[ASSEMBLY / FIXTURE PHOTO]</div>
+          <div class="mini-box">[FINAL PRODUCT PHOTO]</div>
+          <div class="mini-box">[PRODUCTION READY]</div>
+        </div>
+      </section>
+
+      <section class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">What I learned</div>
+          <h2>Engineering lessons from the full design cycle</h2>
+        </div>
+
+        <div class="lessons-grid">
+          <article class="lesson-card">
+            <strong>Design for Manufacturing</strong>
+            <p>A successful design is not finished when the CAD model works; it also needs to be efficient to manufacture and assemble.</p>
+          </article>
+          <article class="lesson-card">
+            <strong>Design Consolidation</strong>
+            <p>Reducing unnecessary components can simplify manufacturing, assembly, sourcing, and maintenance.</p>
+          </article>
+          <article class="lesson-card">
+            <strong>Requirements-Driven Engineering</strong>
+            <p>Engineering decisions must balance functional requirements, environmental constraints, manufacturability, and system-level considerations.</p>
+          </article>
+          <article class="lesson-card">
+            <strong>Iteration</strong>
+            <p>Moving from CAD to prototype to production revealed opportunities that were not obvious during the initial design phase.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="reveal">
+        <div class="section-head">
+          <div class="eyebrow">My role</div>
+          <h2>Worked across mechanical design, prototyping, and production support</h2>
+        </div>
+
+        <div class="role-grid">
+          <div class="role-card">
+            <h3>Summary</h3>
+            <p>Worked across mechanical design, CAD, prototyping, manufacturing, and production.</p>
+          </div>
+
+          <div class="role-block">
+            <div class="role-item">
+              <strong>Mechanical Design</strong>
+              <ul>
+                <li>CAD development</li>
+                <li>Design consolidation</li>
+                <li>Mechanical component development</li>
+              </ul>
+            </div>
+
+            <div class="role-item">
+              <strong>Prototyping</strong>
+              <ul>
+                <li>Supported transition from CAD to physical prototypes</li>
+                <li>Iterated designs based on prototype feedback</li>
+              </ul>
+            </div>
+
+            <div class="role-item">
+              <strong>Manufacturing</strong>
+              <ul>
+                <li>Fixture and process improvements</li>
+                <li>Assembly optimization</li>
+              </ul>
+            </div>
+
+            <div class="role-item">
+              <strong>Production</strong>
+              <ul>
+                <li>Supported the transition from prototype into production</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="portfolio-bottom-nav reveal">
+        <div class="inner">
+          <span>Portfolio navigation</span>
+          <div class="nav-actions">
+            <a href="index.html" class="btn primary">Back to portfolio</a>
+            <a href="projects.html" class="btn">View all projects</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const knobIcon = document.getElementById('knobIcon');
+    const themeKey = 'portfolio-theme';
+
+    function setTheme(theme) {
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem(themeKey, theme);
+      knobIcon.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    }
+
+    const savedTheme = localStorage.getItem(themeKey);
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+    toggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    const navLinks = document.querySelectorAll('.case-nav a');
+    const sections = document.querySelectorAll('section[id]');
+
+    function activateNav() {
+      let current = 'overview';
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 140) current = section.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    }
+    activateNav();
+    window.addEventListener('scroll', activateNav, { passive: true });
+
+  </script>
+</body>
+</html>
