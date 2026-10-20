@@ -152,9 +152,26 @@
     .project-card:hover { transform: translateY(-3px); border-color: var(--accent); }
     .project-card .thumb { aspect-ratio: 4 / 3; overflow: hidden; border-bottom: 1px solid var(--line); }
     .project-card .thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .project-card .thumb.project-placeholder {
+      display: grid;
+      place-items: center;
+      background: var(--surface-2);
+      color: var(--ink-faint);
+      font-size: 54px;
+    }
     .project-card .body { padding: 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
     .project-card h3 { font-size: 18px; }
     .project-card p { margin: 0; color: var(--ink-soft); font-size: 14px; flex: 1; }
+    .project-status {
+      align-self: flex-start;
+      font-family: 'IBM Plex Mono';
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      padding: 4px 8px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      text-transform: uppercase;
+    }
     .tech-stack { display: flex; flex-wrap: wrap; gap: 6px; }
     .tech-stack span {
       font-family: 'IBM Plex Mono';
@@ -224,7 +241,7 @@
             <h3>Low-Power C1D1 Wireless Monitoring Device</h3>
             <p>Mechanical engineering internship case study covering a ruggedized wireless monitoring device from CAD through prototype and production.</p>
             <div class="tech-stack">
-              <span>C1D1</span><span>Wireless Sensing</span><span>Mechanical Design</span><span>DFM</span>
+              <span>SolidWorks</span><span>Product Development</span><span>PCBs</span><span>DFM</span>
             </div>
             <a href="project-blackpearl.html" class="project-link">View project <i class="fas fa-arrow-up-right-from-square"></i></a>
           </div>
@@ -236,19 +253,46 @@
             <h3>Texas Design Build Fly RC Plane</h3>
             <p>A fully custom RC airplane engineered, fabricated, and flight-tested for the AIAA Design/Build/Fly competition.</p>
             <div class="tech-stack">
-              <span>SolidWorks</span><span>FEA</span><span>GD&amp;T</span><span>Composites</span><span>Resin</span>
+              <span>SolidWorks</span><span>FEA</span><span>Aerospace Structures</span><span>Composites</span>
             </div>
             <a href="project-dbf.html" class="project-link">View project <i class="fas fa-arrow-up-right-from-square"></i></a>
           </div>
         </article>
 
+
         <article class="project-card">
-          <div class="thumb"><img src="images/battlebotphoto1.png" alt="Mini Battle Bot"></div>
+          <div class="thumb"><img src="images/pythonsim.gif" alt="Jansen linkage Image"></div>
+          <div class="body">
+            <h3>Walking Delivery Robot</h3>
+            <span class="project-status">Work in progress</span>
+            <p>A walking robot concept for delivery applications. The design and development details will be added as the project progresses.</p>
+            <div class="tech-stack">
+              <span>Robotics</span><span>Locomotion</span>
+            </div>
+            <a href="project-walking-delivery-robot.html" class="project-link">View project <i class="fas fa-arrow-up-right-from-square"></i></a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="thumb"><img src="images/chassisassemblyRevB.png" alt="RC Car Image"></div>
+          <div class="body">
+            <h3>RC Car</h3>
+            <span class="project-status">Work in progress</span>
+            <p>A remote-controlled car project currently in development. The project page will grow with the design, build, and testing process.</p>
+            <div class="tech-stack">
+              <span>Remote Control</span><span>Vehicle Design</span>
+            </div>
+            <a href="project-rc-car.html" class="project-link">View project <i class="fas fa-arrow-up-right-from-square"></i></a>
+          </div>
+        </article>
+
+         <article class="project-card">
+          <div class="thumb"><img src="images/battlebotphoto1.png" alt="1 lb Battlebot"></div>
           <div class="body">
             <h3>1 lb Battlebot</h3>
             <p>A 3D printed, remote-controlled robot designed to battle other robots.</p>
             <div class="tech-stack">
-              <span>SolidWorks</span><span>FEA</span><span>GD&T</span><span>Laser Cutting</span><span>Robotics</span>
+              <span>SolidWorks</span><span>FEA</span><span>GD&amp;T</span><span>Laser Cutting</span><span>Robotics</span>
             </div>
             <a href="project-battlebot.html" class="project-link">View project <i class="fas fa-arrow-up-right-from-square"></i></a>
           </div>
@@ -271,6 +315,7 @@
           <div class="thumb"><img src="images/3dofarm.png" alt="3DOF robotic arm simulation"></div>
           <div class="body">
             <h3>3DOF Robotic Arm Simulation</h3>
+            <span class="project-status">Work in progress</span>
             <p>A MATLAB simulation of a 3DOF robotic arm with forward and inverse kinematics.</p>
             <div class="tech-stack">
               <span>MATLAB</span><span>Simulation</span><span>Kinematics</span><span>Robotics</span>
